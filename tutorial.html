@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,6 +27,16 @@
   --font: 'Inter', -apple-system, sans-serif;
   --mono: 'JetBrains Mono', monospace;
   --sidebar-width: 260px;
+}
+
+[data-theme="light"] {
+  --bg: #f8f9fc;
+  --bg-elevated: #ffffff;
+  --card: #ffffff;
+  --border: #e2e8f0;
+  --text: #1a1a2e;
+  --text-secondary: #4a5568;
+  --text-muted: #a0aec0;
 }
 
 html { scroll-behavior: smooth; }
@@ -135,6 +145,33 @@ body {
 
 .nav-link:hover { background: var(--card); color: var(--text); }
 .nav-link.active { background: rgba(124,58,237,0.15); color: var(--accent-light); }
+
+/* THEME TOGGLE */
+.theme-toggle {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--text);
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 2px;
+  transition: all 0.2s;
+}
+
+.theme-toggle:hover {
+  border-color: var(--accent);
+}
+
+[data-theme="light"] .sidebar {
+  background: var(--bg-elevated);
+  border-right: 1px solid var(--border);
+}
 
 .nav-link-num {
   width: 24px;
@@ -289,6 +326,39 @@ footer a { color: var(--accent-light); text-decoration: none; }
   .scenario { padding: 18px; }
 }
 </style>
+<script>
+// Theme toggle
+(function() {
+  const html = document.documentElement;
+  const themeBtn = document.getElementById('themeToggle');
+  
+  function getAutoTheme() {
+    const hour = new Date().getHours();
+    return hour >= 6 && hour < 18 ? 'light' : 'dark';
+  }
+  
+  const saved = localStorage.getItem('theme');
+  const theme = saved || getAutoTheme();
+  html.setAttribute('data-theme', theme);
+  
+  if (themeBtn) {
+    updateThemeBtn(theme);
+    themeBtn.addEventListener('click', function() {
+      const current = html.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+      updateThemeBtn(next);
+    });
+  }
+  
+  function updateThemeBtn(theme) {
+    if (themeBtn) {
+      themeBtn.innerHTML = theme === 'dark' ? '☀️ 日间模式' : '🌙 夜间模式';
+    }
+  }
+})();
+</script>
 </head>
 <body>
 
@@ -316,7 +386,8 @@ footer a { color: var(--accent-light); text-decoration: none; }
       <a href="#s10" class="nav-link"><span class="nav-link-num">10</span>生成 Wrapper</a>
       <a href="#s11" class="nav-link"><span class="nav-link-num">11</span>生成 IO/Pad</a>
       <a href="#s12" class="nav-link"><span class="nav-link-num">12</span>端口追踪</a>
-      <div class="nav-section-title" style="margin-top: 20px;">其他</div>
+      <div class="nav-section-title" style="margin-top: 20px;">设置</div>
+      <button id="themeToggle" class="theme-toggle">☀️ 日间模式</button>
       <a href="#notes" class="nav-link"><span class="nav-link-num">📌</span>注意事项</a>
     </nav>
   </aside>

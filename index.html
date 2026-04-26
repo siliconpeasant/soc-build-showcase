@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,6 +27,16 @@
   --orange: #f97316;
   --font: 'Inter', -apple-system, sans-serif;
   --mono: 'JetBrains Mono', monospace;
+}
+
+[data-theme="light"] {
+  --bg: #f8fafc;
+  --bg-elevated: #ffffff;
+  --card: #ffffff;
+  --border: #e2e8f0;
+  --text: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
 }
 
 html { scroll-behavior: smooth; }
@@ -110,7 +120,7 @@ body {
 
 .nav-link:hover {
   color: var(--text);
-  background: rgba(255,255,255,0.05);
+  background: var(--card);
 }
 
 .nav-link.active {
@@ -131,6 +141,36 @@ body {
 .nav-cta:hover {
   background: #6d28d9;
   transform: translateY(-1px);
+}
+
+/* THEME TOGGLE */
+.theme-toggle {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--text);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  transition: all 0.2s;
+}
+
+.theme-toggle:hover {
+  border-color: var(--accent);
+  transform: scale(1.05);
+}
+
+[data-theme="light"] .navbar {
+  background: rgba(248,250,252,0.8);
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+[data-theme="light"] .hero::before {
+  background: radial-gradient(ellipse at center, rgba(124,58,237,0.1) 0%, transparent 70%);
 }
 
 /* HERO */
@@ -465,6 +505,42 @@ footer a {
   .nav-links { display: none; }
 }
 </style>
+<script>
+// Theme toggle
+(function() {
+  const html = document.documentElement;
+  const themeBtn = document.getElementById('themeToggle');
+  
+  // Load saved theme or detect auto
+  function getAutoTheme() {
+    const hour = new Date().getHours();
+    // Auto switch at sunset (18:00 Beijing)
+    return hour >= 6 && hour < 18 ? 'light' : 'dark';
+  }
+  
+  const saved = localStorage.getItem('theme');
+  const theme = saved || getAutoTheme();
+  html.setAttribute('data-theme', theme);
+  
+  if (themeBtn) {
+    updateThemeBtn(theme);
+    themeBtn.addEventListener('click', function() {
+      const current = html.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+      updateThemeBtn(next);
+    });
+  }
+  
+  function updateThemeBtn(theme) {
+    if (themeBtn) {
+      themeBtn.textContent = theme === 'dark' ? '☀️' : '🌙';
+      themeBtn.title = theme === 'dark' ? '切换日间模式' : '切换夜��模式';
+    }
+  }
+})();
+</script>
 </head>
 <body>
 
@@ -476,6 +552,7 @@ footer a {
         <span class="logo-text">SoC Build</span>
       </a>
       <div class="nav-links">
+        <button id="themeToggle" class="theme-toggle" title="切换模式">🌙</button>
         <a href="index.html" class="nav-link active">首页</a>
         <a href="tutorial.html" class="nav-link">教程</a>
         <a href="tutorial.html" class="nav-cta">开始使用</a>
