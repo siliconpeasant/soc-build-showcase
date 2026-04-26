@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/jpeg" href="favicon.jpg">
+<title>SoC Build — RTL 自动化构建工具</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #030712;
+  --bg-elevated: #0a0f1a;
+  --card: #111827;
+  --border: #1f2937;
+  --text: #f9fafb;
+  --text-secondary: #9ca3af;
+  --text-muted: #6b7280;
+  --accent: #7c3aed;
+  --accent-light: #a78bfa;
+  --cyan: #06b6d4;
+  --purple: #a855f7;
+  --pink: #ec4899;
+  --green: #22c55e;
+  --orange: #f97316;
+  --font: 'Inter', -apple-system, sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  line-height: 1.6;
+  font-size: 16px;
+  overflow-x: hidden;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* NAVBAR */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 16px 0;
+  background: rgba(3,7,18,0.8);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.navbar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: var(--text);
+}
+
+.logo-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 1.1rem;
+  background-image: url('logo.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+.logo-text {
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-link {
+  padding: 8px 16px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.nav-link:hover {
+  color: var(--text);
+  background: rgba(255,255,255,0.05);
+}
+
+.nav-link.active {
+  color: var(--accent-light);
+}
+
+.nav-cta {
+  padding: 10px 20px;
+  background: var(--accent);
+  color: white;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.nav-cta:hover {
+  background: #6d28d9;
+  transform: translateY(-1px);
+}
+
+/* HERO */
+.hero {
+  padding: 160px 0 120px;
+  text-align: center;
+  position: relative;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 800px;
+  height: 600px;
+  background: radial-gradient(ellipse at center, rgba(124,58,237,0.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: rgba(124,58,237,0.15);
+  border: 1px solid rgba(124,58,237,0.3);
+  border-radius: 100px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent-light);
+  margin-bottom: 32px;
+}
+
+.hero-badge-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--green);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.hero h1 {
+  font-size: 4rem;
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+  margin-bottom: 24px;
+  background: linear-gradient(135deg, var(--text) 0%, var(--accent-light) 50%, var(--pink) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-subtitle {
+  font-size: 1.3rem;
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin: 0 auto 40px;
+  line-height: 1.7;
+}
+
+.hero-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 28px;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 10px;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #6d28d9;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(124,58,237,0.4);
+}
+
+.btn-secondary {
+  background: var(--card);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.btn-secondary:hover {
+  background: var(--bg-elevated);
+  border-color: var(--accent);
+}
+
+/* STATS */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  padding: 48px 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  margin-top: 80px;
+}
+
+.stat {
+  text-align: center;
+}
+
+.stat-value {
+  font-size: 2.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--cyan), var(--purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* FEATURES */
+.features {
+  padding: 120px 0;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 64px;
+}
+
+.section-header h2 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 16px;
+  letter-spacing: -0.02em;
+}
+
+.section-header p {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.feature-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 32px;
+  transition: all 0.3s;
+}
+
+.feature-card:hover {
+  border-color: rgba(124,58,237,0.4);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+}
+
+.feature-icon {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, var(--accent), var(--purple));
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  margin-bottom: 20px;
+}
+
+.feature-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.feature-desc {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+/* SCENARIOS PREVIEW */
+.scenarios-preview {
+  padding: 80px 0 120px;
+  background: var(--bg-elevated);
+}
+
+.scenarios-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-top: 48px;
+}
+
+.scenario-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 24px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  transition: all 0.2s;
+}
+
+.scenario-item:hover {
+  border-color: var(--accent);
+  background: var(--bg);
+}
+
+.scenario-num {
+  width: 36px;
+  height: 36px;
+  background: var(--bg);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent-light);
+  flex-shrink: 0;
+}
+
+.scenario-text {
+  font-weight: 500;
+}
+
+/* CTA */
+.cta {
+  padding: 120px 0;
+  text-align: center;
+}
+
+.cta h2 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 16px;
+}
+
+.cta p {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  margin-bottom: 32px;
+}
+
+/* FOOTER */
+footer {
+  padding: 48px 0;
+  border-top: 1px solid var(--border);
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+footer a {
+  color: var(--accent-light);
+  text-decoration: none;
+}
+
+.footer-content {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.footer-title {
+  margin-bottom: 16px;
+}
+
+.footer-contact {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.contact-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-secondary);
+  transition: color 0.2s;
+}
+
+.contact-item:hover {
+  color: var(--accent-light);
+}
+
+.contact-divider {
+  color: var(--text-muted);
+  margin: 0 4px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+  .hero h1 { font-size: 3rem; }
+  .features-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .hero h1 { font-size: 2.2rem; }
+  .features-grid { grid-template-columns: 1fr; }
+  .stats { grid-template-columns: 1fr; }
+  .scenarios-list { grid-template-columns: 1fr; }
+  .nav-links { display: none; }
+}
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="container">
+    <div class="navbar-inner">
+      <a href="index.html" class="logo">
+        <div class="logo-icon"></div>
+        <span class="logo-text">SoC Build</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html" class="nav-link active">首页</a>
+        <a href="tutorial.html" class="nav-link">教程</a>
+        <a href="tutorial.html" class="nav-cta">开始使用</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="container">
+    <div class="hero-badge">
+      <span class="hero-badge-dot"></span>
+      OpenClaw Skill
+    </div>
+    <h1>SoC Build</h1>
+    <p class="hero-subtitle">
+      RTL 自动化构建工具集。通过自然语言交互，完成 SoC 项目初始化、模块集成、CRG 生成等综合工作。
+    </p>
+    <div class="hero-actions">
+      <a href="tutorial.html" class="btn btn-primary">
+        📖 查看教程
+      </a>
+    </div>
+    
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-value">12+</div>
+        <div class="stat-label">自动化场景</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">100%</div>
+        <div class="stat-label">自然语言驱动</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">0</div>
+        <div class="stat-label">手动编码</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="features">
+  <div class="container">
+    <div class="section-header">
+      <h2>核心能力</h2>
+      <p>从项目初始化到 CRG 生成，覆盖 SoC 前端设计全流程</p>
+    </div>
+    
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🏗️</div>
+        <h3 class="feature-title">项目初始化</h3>
+        <p class="feature-desc">一键生成标准化 SoC 目录结构，包含 RTL、仿真、验证、综合等完整工程骨架。</p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">🔗</div>
+        <h3 class="feature-title">模块集成</h3>
+        <p class="feature-desc">智能解析子模块端口，自动生成顶层 RTL，同名端口自动合并，独有端口加前缀区分。</p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <h3 class="feature-title">CRG 生成</h3>
+        <p class="feature-desc">从 Excel 配置自动生成时钟复位门控模块，支持分频、OCC、TDR 等复杂结构。</p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">🔄</div>
+        <h3 class="feature-title">增量更新</h3>
+        <p class="feature-desc">子模块端口变更后一键刷新顶层，自动标记新增/修改/删除端口，保留手动连线。</p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">📝</div>
+        <h3 class="feature-title">端口追踪</h3>
+        <p class="feature-desc">保存端口快照，对比检测变更，生成变更报告，确保接口一致性。</p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">🎯</div>
+        <h3 class="feature-title">零代码操作</h3>
+        <p class="feature-desc">全程自然语言交互，无需记忆命令参数，AI Agent 自动理解意图并执行。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="scenarios-preview">
+  <div class="container">
+    <div class="section-header">
+      <h2>使用场景</h2>
+      <p>覆盖 SoC 前端设计 12+ 常见场景</p>
+    </div>
+    
+    <div class="scenarios-list">
+      <div class="scenario-item">
+        <span class="scenario-num">01</span>
+        <span class="scenario-text">初始化 SoC 项目</span>
+      </div>
+      <div class="scenario-item">
+        <span class="scenario-num">02</span>
+        <span class="scenario-text">生成 Filelist</span>
+      </div>
+      <div class="scenario-item">
+        <span class="scenario-num">03</span>
+        <span class="scenario-text">提取模块端口</span>
+      </div>
+      <div class="scenario-item">
+        <span class="scenario-num">04</span>
+        <span class="scenario-text">生成实例化代码</span>
+      </div>
+      <div class="scenario-item">
+        <span class="scenario-num">05</span>
+        <span class="scenario-text">集成模块到顶层</span>
+      </div>
+      <div class="scenario-item">
+        <span class="scenario-num">06</span>
+        <span class="scenario-text">刷新顶层（子模块更新后）</span>
+      </div>
+      <div class="scenario-item">
+        <span class="scenario-num">07</span>
+        <span class="scenario-text">保留手动修改的连线</span>
+      </div>
+      <div class="scenario-item">
+        <span class="scenario-num">08</span>
+        <span class="scenario-text">生成 CRG</span>
+      </div>
+      <div class="scenario-item">
+        <span class="scenario-num">09</span>
+        <span class="scenario-text">添加 IP</span>
+      </div>
+      <div class="scenario-item">
+        <span class="scenario-num">10</span>
+        <span class="scenario-text">生成 SV Wrapper</span>
+      </div>
+      <div class="scenario-item">
+        <span class="scenario-num">11</span>
+        <span class="scenario-text">生成 IO/Pad</span>
+      </div>
+      <div class="scenario-item">
+        <span class="scenario-num">12</span>
+        <span class="scenario-text">端口变更追踪</span>
+      </div>
+    </div>
+    
+    <div style="text-align: center; margin-top: 48px;">
+      <a href="tutorial.html" class="btn btn-primary">
+        查看详细教程 →
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="cta">
+  <div class="container">
+    <h2>开始使用 SoC Build</h2>
+    <p>即刻体验 RTL 自动化构建</p>
+    <a href="tutorial.html" class="btn btn-primary">
+      查看教程 →
+    </a>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-title">SoC Build · RTL 自动化构建工具</div>
+      <div class="footer-contact">
+        <a href="mailto:ninghechuan@foxmail.com" class="contact-item">
+          <img src="logo.jpg" alt="" style="width: 20px; height: 20px; border-radius: 4px; vertical-align: middle;">
+          <span>ninghechuan@foxmail.com</span>
+        </a>
+        <span class="contact-divider">|</span>
+        <span class="contact-item">
+          <span>📱</span>
+          <span>公众号：硅农</span>
+        </span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/jpeg" href="favicon.jpg">
+<title>教程 — SoC Build</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #0f0f14;
+  --bg-elevated: #16161e;
+  --card: #1c1c26;
+  --border: #2a2a38;
+  --text: #e8e8f0;
+  --text-secondary: #a8a8b8;
+  --text-muted: #686878;
+  --accent: #7c3aed;
+  --accent-light: #a78bfa;
+  --green: #22c55e;
+  --cyan: #06b6d4;
+  --purple: #a855f7;
+  --orange: #f97316;
+  --font: 'Inter', -apple-system, sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+  --sidebar-width: 260px;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  line-height: 1.65;
+  font-size: 15px;
+}
+
+.layout { display: flex; min-height: 100vh; }
+
+/* SIDEBAR */
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: var(--sidebar-width);
+  height: 100vh;
+  background: var(--bg-elevated);
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  z-index: 100;
+}
+
+.sidebar-header {
+  padding: 24px 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--text);
+  margin-bottom: 12px;
+}
+
+.sidebar-logo-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.9rem;
+  background-image: url('logo.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+.sidebar-logo-text {
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.sidebar-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: var(--card);
+  border-radius: 6px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.8rem;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.sidebar-back:hover {
+  color: var(--accent-light);
+}
+
+.sidebar-nav { flex: 1; padding: 16px 12px; }
+
+.nav-section-title {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 12px;
+  margin-bottom: 4px;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-bottom: 2px;
+  transition: all 0.2s;
+}
+
+.nav-link:hover { background: var(--card); color: var(--text); }
+.nav-link.active { background: rgba(124,58,237,0.15); color: var(--accent-light); }
+
+.nav-link-num {
+  width: 24px;
+  height: 24px;
+  background: var(--card);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.nav-link.active .nav-link-num { background: var(--accent); color: white; }
+
+/* MAIN */
+.main { flex: 1; margin-left: var(--sidebar-width); }
+.container { max-width: 820px; margin: 0 auto; padding: 0 48px; }
+
+header { padding: 80px 0 48px; border-bottom: 1px solid var(--border); }
+h1 { font-size: 2.5rem; font-weight: 700; line-height: 1.2; margin-bottom: 16px; letter-spacing: -0.03em; }
+.subtitle { font-size: 1.1rem; color: var(--text-secondary); line-height: 1.7; }
+main { padding: 48px 0 120px; }
+
+h2 { font-size: 1.4rem; font-weight: 700; margin-top: 56px; margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
+h2::before { content: ''; width: 4px; height: 24px; background: var(--accent); border-radius: 2px; }
+
+/* SCENARIO CARD */
+.scenario {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px;
+  margin: 24px 0;
+  transition: all 0.3s;
+}
+
+.scenario:hover { border-color: rgba(124,58,237,0.4); box-shadow: 0 0 40px rgba(124,58,237,0.08); }
+
+.scenario-header { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 18px; }
+
+.scenario-num {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, var(--accent), var(--purple));
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.scenario-title-wrap { flex: 1; }
+.scenario-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 2px; }
+.scenario-tag { font-size: 0.7rem; color: var(--text-muted); font-family: var(--mono); }
+
+/* CHAT */
+.chat-section { margin: 20px 0; }
+.chat-label { font-size: 0.65rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 10px; }
+.chat-block { background: var(--bg); border-radius: 10px; overflow: hidden; }
+.chat-content { padding: 12px; font-size: 0.9rem; }
+
+.chat-prompt { color: var(--text); padding: 10px 14px; background: rgba(168,85,247,0.1); border-left: 3px solid var(--purple); margin: 4px 0; border-radius: 0 8px 8px 0; display: flex; align-items: flex-start; gap: 10px; }
+.chat-prompt::before { content: '👤 你'; font-size: 0.7rem; font-weight: 600; color: var(--purple); background: rgba(168,85,247,0.15); padding: 2px 8px; border-radius: 4px; flex-shrink: 0; }
+.chat-action { color: var(--text); padding: 10px 14px; background: rgba(6,182,212,0.08); border-left: 3px solid var(--cyan); margin: 4px 0; border-radius: 0 8px 8px 0; display: flex; align-items: flex-start; gap: 10px; }
+.chat-action::before { content: '🤖 AI'; font-size: 0.7rem; font-weight: 600; color: var(--cyan); background: rgba(6,182,212,0.15); padding: 2px 8px; border-radius: 4px; flex-shrink: 0; }
+.chat-output { color: var(--text-secondary); padding: 10px 14px; background: rgba(34,197,94,0.08); border-left: 3px solid var(--green); margin: 4px 0; border-radius: 0 8px 8px 0; font-family: var(--mono); font-size: 0.8rem; display: flex; align-items: flex-start; gap: 10px; }
+.chat-output::before { content: '✓ 结果'; font-size: 0.7rem; font-weight: 600; color: var(--green); background: rgba(34,197,94,0.15); padding: 2px 8px; border-radius: 4px; flex-shrink: 0; font-family: var(--font); }
+
+/* FILE TREE */
+.file-tree { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 16px; font-family: var(--mono); font-size: 0.8rem; line-height: 1.8; overflow-x: auto; }
+.file-tree .folder { color: var(--cyan); }
+.file-tree .file { color: var(--text); }
+.file-tree .comment { color: var(--text-muted); }
+
+/* RULES */
+.rules-box { background: rgba(249,115,22,0.08); border: 1px solid rgba(249,115,22,0.25); border-radius: 10px; padding: 16px 20px; margin: 20px 0; }
+.rules-title { font-weight: 600; font-size: 0.85rem; color: var(--orange); margin-bottom: 12px; }
+.rules-list { list-style: none; }
+.rules-list li { padding: 8px 0; border-bottom: 1px solid rgba(249,115,22,0.15); display: flex; align-items: flex-start; gap: 10px; color: var(--text-secondary); font-size: 0.9rem; }
+.rules-list li:last-child { border-bottom: none; }
+.rules-arrow { color: var(--green); font-family: var(--mono); flex-shrink: 0; }
+
+/* NOTES */
+.notes-section { margin-top: 56px; padding: 28px; background: var(--card); border-radius: 16px; border: 1px solid var(--border); }
+.notes-section h2 { margin-top: 0; }
+.note-list { list-style: none; }
+.note-list li { padding: 12px 0; border-bottom: 1px solid var(--border); color: var(--text-secondary); font-size: 0.9rem; }
+.note-list li:last-child { border-bottom: none; }
+.note-list strong { color: var(--text); font-weight: 600; }
+.note-list code { background: var(--bg); padding: 2px 8px; border-radius: 4px; font-family: var(--mono); font-size: 0.85rem; }
+
+/* FOOTER */
+footer {
+  text-align: center;
+  padding: 48px 0;
+  border-top: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+footer a { color: var(--accent-light); text-decoration: none; }
+
+.footer-content {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.footer-title {
+  margin-bottom: 16px;
+}
+
+.footer-contact {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.contact-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-secondary);
+  transition: color 0.2s;
+}
+
+.contact-item:hover {
+  color: var(--accent-light);
+}
+
+.contact-divider {
+  color: var(--text-muted);
+  margin: 0 4px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+  .sidebar { transform: translateX(-100%); transition: transform 0.3s; }
+  .sidebar.open { transform: translateX(0); }
+  .main { margin-left: 0; }
+  .container { padding: 0 24px; }
+}
+
+@media (max-width: 640px) {
+  header { padding: 48px 0 32px; }
+  h1 { font-size: 1.8rem; }
+  .scenario { padding: 18px; }
+}
+</style>
+</head>
+<body>
+
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <a href="index.html" class="sidebar-logo">
+        <div class="sidebar-logo-icon"></div>
+        <span class="sidebar-logo-text">SoC Build</span>
+      </a>
+      <a href="index.html" class="sidebar-back">← 返回首页</a>
+    </div>
+    
+    <nav class="sidebar-nav">
+      <div class="nav-section-title">使用场景</div>
+      <a href="#s1" class="nav-link"><span class="nav-link-num">01</span>初始化项目</a>
+      <a href="#s2" class="nav-link"><span class="nav-link-num">02</span>生成 Filelist</a>
+      <a href="#s3" class="nav-link"><span class="nav-link-num">03</span>提取端口</a>
+      <a href="#s4" class="nav-link"><span class="nav-link-num">04</span>生成实例化</a>
+      <a href="#s5" class="nav-link"><span class="nav-link-num">05</span>集成模块</a>
+      <a href="#s6" class="nav-link"><span class="nav-link-num">06</span>刷新顶层</a>
+      <a href="#s7" class="nav-link"><span class="nav-link-num">07</span>保留连线</a>
+      <a href="#s8" class="nav-link"><span class="nav-link-num">08</span>生成 CRG</a>
+      <a href="#s9" class="nav-link"><span class="nav-link-num">09</span>添加 IP</a>
+      <a href="#s10" class="nav-link"><span class="nav-link-num">10</span>生成 Wrapper</a>
+      <a href="#s11" class="nav-link"><span class="nav-link-num">11</span>生成 IO/Pad</a>
+      <a href="#s12" class="nav-link"><span class="nav-link-num">12</span>端口追踪</a>
+      <div class="nav-section-title" style="margin-top: 20px;">其他</div>
+      <a href="#notes" class="nav-link"><span class="nav-link-num">📌</span>注意事项</a>
+    </nav>
+  </aside>
+
+  <div class="main">
+    <header>
+      <div class="container">
+        <h1>SoC Build 教程</h1>
+        <p class="subtitle">通过自然语言交互，完成 SoC 项目初始化、模块集成、CRG 生成等综合工作。</p>
+      </div>
+    </header>
+
+    <main>
+      <div class="container">
+
+        <div class="scenario" id="s1">
+          <div class="scenario-header">
+            <div class="scenario-num">01</div>
+            <div class="scenario-title-wrap">
+              <h3 class="scenario-title">初始化 SoC 项目</h3>
+              <div class="scenario-tag">PROJECT INIT</div>
+            </div>
+          </div>
+          <div class="chat-section">
+            <div class="chat-label">💬 对话示例</div>
+            <div class="chat-block">
+              <div class="chat-content">
+                <div class="chat-prompt">"帮我初始化一个 soc 项目"</div>
+                <div class="chat-action">解析需求 → 创建目录结构 → 生成 Makefile 和 README</div>
+                <div class="chat-output">项目骨架已生成，共 8 个目录</div>
+              </div>
+            </div>
+          </div>
+          <div class="file-tree">
+<span class="folder">📁 &lt;project_name&gt;/</span>
+├── <span class="file">Makefile</span>              <span class="comment"># 顶层构建入口</span>
+├── <span class="file">README.md</span>
+├── <span class="folder">chip/</span>                 <span class="comment"># RTL 设计源码</span>
+│   ├── <span class="folder">core/</span>             <span class="comment"># 处理器核心</span>
+│   ├── <span class="folder">bus/</span>              <span class="comment"># 总线</span>
+│   ├── <span class="folder">periph/</span>           <span class="comment"># 外设</span>
+│   ├── <span class="folder">interconnect/</span>     <span class="comment"># 互联</span>
+│   ├── <span class="folder">top/</span>              <span class="comment"># SoC 顶层</span>
+│   └── <span class="folder">lib/</span>              <span class="comment"># 通用库</span>
+├── <span class="folder">ip/</span>                   <span class="comment"># IP 目录</span>
+├── <span class="folder">sim/</span>                  <span class="comment"># 全芯片级仿真</span>
+├── <span class="folder">syn/</span>                  <span class="comment"># 综合</span>
+├── <span class="folder">verif/</span>                <span class="comment"># 验证平台</span>
+└── <span class="folder">scripts/</span>              <span class="comment"># 公共脚本</span>
+          </div>
+        </div>
+
+        <div class="scenario" id="s2">
+          <div class="scenario-header">
+            <div class="scenario-num">02</div>
+            <div class="scenario-title-wrap">
+              <h3 class="scenario-title">生成 Filelist</h3>
+              <div class="scenario-tag">FILELIST</div>
+            </div>
+          </div>
+          <div class="chat-section">
+            <div class="chat-label">💬 对话示例</div>
+            <div class="chat-block">
+              <div class="chat-content">
+                <div class="chat-prompt">"帮我生成 filelist"</div>
+                <div class="chat-action">扫描目录 → 筛选 .v/.sv 文件 → 生成 .f 列表</div>
+                <div class="chat-output">已生成 filelist.f，包含 42 个文件</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="scenario" id="s3">
+          <div class="scenario-header">
+            <div class="scenario-num">03</div>
+            <div class="scenario-title-wrap">
+              <h3 class="scenario-title">提取模块端口</h3>
+              <div class="scenario-tag">PORT EXTRACTION</div>
+            </div>
+          </div>
+          <div class="chat-section">
+            <div class="chat-label">💬 对话示例</div>
+            <div class="chat-block">
+              <div class="chat-content">
+                <div class="chat-prompt">"提取这个模块的端口"<br>"看看这个模块有什么接口"</div>
+                <div class="chat-action">解析 Verilog → 提取参数和端口信息</div>
+                <div class="chat-output">模块有 3 个参数、28 个端口</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="scenario" id="s4">
+          <div class="scenario-header">
+            <div class="scenario-num">04</div>
+            <div class="scenario-title-wrap">
+              <h3 class="scenario-title">生成实例化代码</h3>
+              <div class="scenario-tag">INSTANTIATION</div>
+            </div>
+          </div>
+          <div class="chat-section">
+            <div class="chat-label">💬 对话示例</div>
+            <div class="chat-block">
+              <div class="chat-content">
+                <div class="chat-prompt">"帮我生成这个模块的实例化代码"</div>
+                <div class="chat-action">解析模块端口 → 生成对齐格式的实例化</div>
+                <div class="chat-output">已生成实例化代码，28 个端口</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="scenario" id="s5">
+          <div class="scenario-header">
+            <div class="scenario-num">05</div>
+            <div class="scenario-title-wrap">
+              <h3 class="scenario-title">集成模块到顶层</h3>
+              <div class="scenario-tag">TOP INTEGRATION</div>
+            </div>
+          </div>
+          <div class="chat-section">
+            <div class="chat-label">💬 对话示例</div>
+            <div class="chat-block">
+              <div class="chat-content">
+                <div class="chat-prompt">"把这几个模块集成到顶层"<br>"生成 soc 顶层"</div>
+                <div class="chat-action">解析子模块端口 → 智能连接 → 生成顶层 RTL</div>
+                <div class="chat-output">顶层已生成，集成 5 个模块</div>
+              </div>
+            </div>
+          </div>
+          <div class="rules-box">
+            <div class="rules-title">📋 智能连接规则</div>
+            <ul class="rules-list">
+              <li><span class="rules-arrow">→</span>同名 input 端口 → 共享为顶层 input</li>
+              <li><span class="rules-arrow">→</span>output + input 混合 → 内部 wire（output 驱动 input）</li>
+              <li><span class="rules-arrow">→</span>output + output → 各自独立，加模块前缀区分</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="scenario" id="s6">
+          <div class="scenario-header">
+            <div class="scenario-num">06</div>
+            <div class="scenario-title-wrap">
+              <h3 class="scenario-title">刷新顶层（子模块更新后）</h3>
+              <div class="scenario-tag">TOP REFRESH</div>
+            </div>
+          </div>
+          <div class="chat-section">
+            <div class="chat-label">💬 对话示例</div>
+            <div class="chat-block">
+              <div class="chat-content">
+                <div class="chat-prompt">"子模块端口变了，更新下顶层"<br>"刷新 soc_top"</div>
+                <div class="chat-action">检测端口变更 → 更新实例化 → 标记变更点</div>
+                <div class="chat-output">已更新 3 个模块，5 个端口变更</div>
+              </div>
+            </div>
+          </div>
+          <div class="rules-box">
+            <div class="rules-title">📌 变更标记</div>
+            <ul class="rules-list">
+              <li><span class="rules-arrow">[NEW]</span> 新增端口</li>
+              <li><span class="rules-arrow">[MOD]</span> 方向/位宽修改</li>
+              <li><span class="rules-arrow">[DEL]</span> 已删除端口（实例化末尾保留注释）</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="scenario" id="s7">
+          <div class="scenario-header">
+            <div class="scenario-num">07</div>
+            <div class="scenario-title-wrap">
+              <h3 class="scenario-title">保留手动修改的连线</h3>
+              <div class="scenario-tag">MANUAL SYNC</div>
+            </div>
+          </div>
+          <div class="chat-section">
+            <div class="chat-label">💬 对话示例</div>
+            <div class="chat-block">
+              <div class="chat-content">
+                <div class="chat-prompt">"我手动改了顶层，帮我同步到配置"</div>
+                <div class="chat-action">提取修改后的连线 → 同步到配置文件</div>
+                <div class="chat-output">已同步 12 条手动连线</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="scenario" id="s8">
+          <div class="scenario-header">
+            <div class="scenario-num">08</div>
+            <div class="scenario-title-wrap">
+              <h3 class="scenario-title">生成 CRG</h3>
+              <div class="scenario-tag">CRG GENERATION</div>
+            </div>
+          </div>
+          <div class="chat-section">
+            <div class="chat-label">💬 对话示例</div>
+            <div class="chat-block">
+              <div class="chat-content">
+                <div class="chat-prompt">"帮我生成 CRG"<br>"生成时钟复位模块"</div>
+                <div class="chat-action">解析 Excel 配置 → 生成时钟/复位逻辑</div>
+                <div class="chat-output">CRG 已生成，50 个时钟，54 个复位</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="scenario" id="s9">
+          <div class="scenario-header">
+            <div class="scenario-num">09</div>
+            <div class="scenario-title-wrap">
+              <h3 class="scenario-title">添加 IP</h3>
+              <div class="scenario-tag">IP CREATION</div>
+            </div>
+          </div>
+          <div class="chat-section">
+            <div class="chat-label">💬 对话示例</div>
+            <div class="chat-block">
+              <div class="chat-content">
+                <div class="chat-prompt">"帮我添加一个 IP"</div>
+                <div class="chat-action">创建 IP 目录 → 生成 RTL/tb/Makefile</div>
+                <div class="chat-output">IP my_ip 已创建</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="scenario" id="s10">
+          <div class="scenario-header">
+            <div class="scenario-num">10</div>
+            <div class="scenario-title-wrap">
+              <h3 class="scenario-title">生成 SV Wrapper</h3>
+              <div class="scenario-tag">WRAPPER</div>
+            </div>
+          </div>
+          <div class="chat-section">
+            <div class="chat-label">💬 对话示例</div>
+            <div class="chat-block">
+              <div class="chat-content">
+                <div class="chat-prompt">"帮我生成这个模块的 wrapper"</div>
+                <div class="chat-action">解析模块 → 生成 SV wrapper</div>
+                <div class="chat-output">wrapper 已生成</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="scenario" id="s11">
+          <div class="scenario-header">
+            <div class="scenario-num">11</div>
+            <div class="scenario-title-wrap">
+              <h3 class="scenario-title">生成 IO/Pad</h3>
+              <div class="scenario-tag">IO GENERATION</div>
+            </div>
+          </div>
+          <div class="chat-section">
+            <div class="chat-label">💬 对话示例</div>
+            <div class="chat-block">
+              <div class="chat-content">
+                <div class="chat-prompt">"生成 IO pad"<br>"生成 pinmux"</div>
+                <div class="chat-action">解析 IO 配置 → 生成 pad/pinmux 模块</div>
+                <div class="chat-output">IO 模块已生成，32 个 pad</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="scenario" id="s12">
+          <div class="scenario-header">
+            <div class="scenario-num">12</div>
+            <div class="scenario-title-wrap">
+              <h3 class="scenario-title">端口变更追踪</h3>
+              <div class="scenario-tag">PORT TRACKING</div>
+            </div>
+          </div>
+          <div class="chat-section">
+            <div class="chat-label">💬 对话示例</div>
+            <div class="chat-block">
+              <div class="chat-content">
+                <div class="chat-prompt">"对比下这个模块端口有没有变"</div>
+                <div class="chat-action">对比端口快照 → 检测变更 → 生成报告</div>
+                <div class="chat-output">发现 3 个新增端口，1 个删除</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="notes-section" id="notes">
+          <h2>注意事项</h2>
+          <ul class="note-list">
+            <li><strong>Python 依赖</strong>：<code>pandas</code>、<code>numpy</code>（CRG 生成需要）</li>
+            <li><strong>生成的顶层文件</strong>：文件头带 <code>AUTO-GENERATED</code> 标记，不建议直接手动编辑</li>
+            <li><strong>手动修改保留流程</strong>：修改顶层 → 提取连接关系 → 重新生成</li>
+            <li><strong>信号命名</strong>：独有端口自动加模块前缀，共享端口保持原名</li>
+          </ul>
+        </div>
+
+      </div>
+    </main>
+
+    <footer>
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-title">SoC Build · RTL 自动化构建工具</div>
+          <div class="footer-contact">
+            <a href="mailto:ninghechuan@foxmail.com" class="contact-item">
+              <img src="logo.jpg" alt="" style="width: 20px; height: 20px; border-radius: 4px; vertical-align: middle;">
+              <span>ninghechuan@foxmail.com</span>
+            </a>
+            <span class="contact-divider">|</span>
+            <span class="contact-item">
+              <span class="contact-icon">📱</span>
+              <span>公众号：硅农</span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+</div>
+
+<script>
+const navLinks = document.querySelectorAll('.nav-link');
+const scenarios = document.querySelectorAll('.scenario');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const id = entry.target.id;
+      navLinks.forEach(link => {
+        link.classList.toggle('active', link.getAttribute('href') === `#${id}`);
+      });
+    }
+  });
+}, { threshold: 0.3 });
+scenarios.forEach(s => observer.observe(s));
+</script>
+
+</body>
+</html>
