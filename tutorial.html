@@ -326,39 +326,6 @@ footer a { color: var(--accent-light); text-decoration: none; }
   .scenario { padding: 18px; }
 }
 </style>
-<script>
-// Theme toggle
-(function() {
-  const html = document.documentElement;
-  const themeBtn = document.getElementById('themeToggle');
-  
-  function getAutoTheme() {
-    const hour = new Date().getHours();
-    return hour >= 6 && hour < 18 ? 'light' : 'dark';
-  }
-  
-  const saved = localStorage.getItem('theme');
-  const theme = saved || getAutoTheme();
-  html.setAttribute('data-theme', theme);
-  
-  if (themeBtn) {
-    updateThemeBtn(theme);
-    themeBtn.addEventListener('click', function() {
-      const current = html.getAttribute('data-theme');
-      const next = current === 'dark' ? 'light' : 'dark';
-      html.setAttribute('data-theme', next);
-      localStorage.setItem('theme', next);
-      updateThemeBtn(next);
-    });
-  }
-  
-  function updateThemeBtn(theme) {
-    if (themeBtn) {
-      themeBtn.innerHTML = theme === 'dark' ? '☀️ 日间模式' : '🌙 夜间模式';
-    }
-  }
-})();
-</script>
 </head>
 <body>
 
@@ -724,6 +691,40 @@ const observer = new IntersectionObserver((entries) => {
   });
 }, { threshold: 0.3 });
 scenarios.forEach(s => observer.observe(s));
+</script>
+<script>
+// Theme toggle
+(function() {
+  const html = document.documentElement;
+  const themeBtn = document.getElementById('themeToggle');
+  
+  function getAutoTheme() {
+    const hour = new Date().getHours();
+    return hour >= 6 && hour < 18 ? 'light' : 'dark';
+  }
+  
+  const saved = localStorage.getItem('theme');
+  const theme = saved || getAutoTheme();
+  html.setAttribute('data-theme', theme);
+  
+  function updateThemeBtn(t) {
+    if (themeBtn) {
+      themeBtn.innerHTML = t === 'dark' ? '☀️ 日间模式' : '🌙 夜间模式';
+    }
+  }
+  
+  updateThemeBtn(theme);
+  
+  if (themeBtn) {
+    themeBtn.addEventListener('click', function() {
+      const current = html.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+      updateThemeBtn(next);
+    });
+  }
+})();
 </script>
 
 </body>

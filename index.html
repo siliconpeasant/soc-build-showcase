@@ -505,42 +505,6 @@ footer a {
   .nav-links { display: none; }
 }
 </style>
-<script>
-// Theme toggle
-(function() {
-  const html = document.documentElement;
-  const themeBtn = document.getElementById('themeToggle');
-  
-  // Load saved theme or detect auto
-  function getAutoTheme() {
-    const hour = new Date().getHours();
-    // Auto switch at sunset (18:00 Beijing)
-    return hour >= 6 && hour < 18 ? 'light' : 'dark';
-  }
-  
-  const saved = localStorage.getItem('theme');
-  const theme = saved || getAutoTheme();
-  html.setAttribute('data-theme', theme);
-  
-  if (themeBtn) {
-    updateThemeBtn(theme);
-    themeBtn.addEventListener('click', function() {
-      const current = html.getAttribute('data-theme');
-      const next = current === 'dark' ? 'light' : 'dark';
-      html.setAttribute('data-theme', next);
-      localStorage.setItem('theme', next);
-      updateThemeBtn(next);
-    });
-  }
-  
-  function updateThemeBtn(theme) {
-    if (themeBtn) {
-      themeBtn.textContent = theme === 'dark' ? '☀️' : '🌙';
-      themeBtn.title = theme === 'dark' ? '切换日间模式' : '切换夜��模式';
-    }
-  }
-})();
-</script>
 </head>
 <body>
 
@@ -738,3 +702,38 @@ footer a {
 
 </body>
 </html>
+<script>
+// Theme toggle
+(function() {
+  const html = document.documentElement;
+  const themeBtn = document.getElementById('themeToggle');
+  
+  function getAutoTheme() {
+    const hour = new Date().getHours();
+    return hour >= 6 && hour < 18 ? 'light' : 'dark';
+  }
+  
+  const saved = localStorage.getItem('theme');
+  const theme = saved || getAutoTheme();
+  html.setAttribute('data-theme', theme);
+  
+  function updateThemeBtn(t) {
+    if (themeBtn) {
+      themeBtn.textContent = t === 'dark' ? '☀️' : '🌙';
+      themeBtn.title = t === 'dark' ? '切换日间模式' : '切换夜间模式';
+    }
+  }
+  
+  updateThemeBtn(theme);
+  
+  if (themeBtn) {
+    themeBtn.addEventListener('click', function() {
+      const current = html.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+      updateThemeBtn(next);
+    });
+  }
+})();
+</script>
