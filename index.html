@@ -143,6 +143,153 @@ body {
   transform: translateY(-1px);
 }
 
+/* DOWNLOAD SECTION */
+.download-section {
+  padding: 100px 0;
+  background: var(--bg-elevated);
+}
+
+.download-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 48px;
+  max-width: 720px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.download-card h2 {
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 12px;
+  letter-spacing: -0.02em;
+}
+
+.download-card .download-subtitle {
+  color: var(--text-secondary);
+  margin-bottom: 36px;
+  font-size: 1.05rem;
+}
+
+.download-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  background: rgba(34,197,94,0.12);
+  border: 1px solid rgba(34,197,94,0.3);
+  border-radius: 100px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--green);
+  margin-bottom: 28px;
+}
+
+.download-command-box {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.download-command {
+  font-family: var(--mono);
+  font-size: 0.95rem;
+  color: var(--cyan);
+  text-align: left;
+  word-break: break-all;
+}
+
+.copy-btn {
+  padding: 8px 16px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 600;
+  transition: all 0.2s;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.copy-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent-light);
+}
+
+.copy-btn.copied {
+  border-color: var(--green);
+  color: var(--green);
+}
+
+.download-steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 32px;
+  text-align: left;
+}
+
+.download-step {
+  padding: 20px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  transition: all 0.2s;
+}
+
+.download-step:hover {
+  border-color: rgba(124,58,237,0.4);
+}
+
+.download-step-num {
+  width: 28px;
+  height: 28px;
+  background: linear-gradient(135deg, var(--accent), var(--purple));
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.8rem;
+  margin-bottom: 12px;
+}
+
+.download-step-title {
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 6px;
+}
+
+.download-step-desc {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.download-note {
+  margin-top: 24px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.download-note a {
+  color: var(--accent-light);
+  text-decoration: none;
+}
+
+.download-note a:hover {
+  text-decoration: underline;
+}
+
 /* THEME TOGGLE */
 .theme-toggle {
   width: 40px;
@@ -495,6 +642,7 @@ footer a {
 @media (max-width: 1024px) {
   .hero h1 { font-size: 3rem; }
   .features-grid { grid-template-columns: repeat(2, 1fr); }
+  .download-steps { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 768px) {
@@ -519,7 +667,7 @@ footer a {
         <button id="themeToggle" class="theme-toggle" title="切换模式">🌙</button>
         <a href="index.html" class="nav-link active">首页</a>
         <a href="tutorial.html" class="nav-link">教程</a>
-        <a href="tutorial.html" class="nav-cta">开始使用</a>
+        <a href="#download" class="nav-cta" style="display:inline-flex;align-items:center;gap:6px;">⬇ 下载安装</a>
       </div>
     </div>
   </div>
@@ -675,6 +823,41 @@ footer a {
   </div>
 </section>
 
+<section class="download-section" id="download">
+  <div class="container">
+    <div class="download-card">
+      <div class="download-badge">✅ OpenClaw Skill</div>
+      <h2>下载安装 SoC Build</h2>
+      <p class="download-subtitle">一行命令，即刻拥有 SoC RTL 自动化构建能力</p>
+
+      <div class="download-command-box">
+        <span class="download-command">skillhub install soc-build</span>
+        <button class="copy-btn" onclick="copyCommand(this)">复制</button>
+      </div>
+
+      <div class="download-steps">
+        <div class="download-step">
+          <div class="download-step-num">1</div>
+          <div class="download-step-title">安装 SkillHub CLI</div>
+          <div class="download-step-desc">CLI 会自动检测并安装所有依赖环境（Python3、curl 等）</div>
+        </div>
+        <div class="download-step">
+          <div class="download-step-num">2</div>
+          <div class="download-step-title">拉取 soc-build 技能包</div>
+          <div class="download-step-desc">自动下载技能包及所需的脚本、模板和配置文件</div>
+        </div>
+        <div class="download-step">
+          <div class="download-step-num">3</div>
+          <div class="download-step-title">开始使用</div>
+          <div class="download-step-desc">用自然语言描述需求，AI Agent 自动完成构建工作</div>
+        </div>
+      </div>
+
+      <p class="download-note">需要 <a href="https://openclaw.ai" target="_blank">OpenClaw</a> 运行环境 · 详情请参阅 <a href="tutorial.html">使用教程</a></p>
+    </div>
+  </div>
+</section>
+
 <section class="cta">
   <div class="container">
     <h2>开始使用 SoC Build</h2>
@@ -740,4 +923,17 @@ footer a {
     });
   }
 })();
+
+// Copy command
+function copyCommand(btn) {
+  const cmd = 'skillhub install soc-build';
+  navigator.clipboard.writeText(cmd).then(() => {
+    btn.textContent = '已复制 ✓';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = '复制';
+      btn.classList.remove('copied');
+    }, 2000);
+  });
+}
 </script>
