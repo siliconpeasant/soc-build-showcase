@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/jpeg" href="favicon.jpg">
+<title>下载安装 — SoC Build</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #030712;
+  --bg-elevated: #0a0f1a;
+  --card: #111827;
+  --border: #1f2937;
+  --text: #f9fafb;
+  --text-secondary: #9ca3af;
+  --text-muted: #6b7280;
+  --accent: #7c3aed;
+  --accent-light: #a78bfa;
+  --cyan: #06b6d4;
+  --green: #22c55e;
+  --orange: #f97316;
+  --red: #ef4444;
+  --font: 'Inter', -apple-system, sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+}
+
+[data-theme="light"] {
+  --bg: #f8fafc;
+  --bg-elevated: #ffffff;
+  --card: #ffffff;
+  --border: #e2e8f0;
+  --text: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  line-height: 1.7;
+}
+
+.navbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 16px 0;
+  background: rgba(3,7,18,0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+[data-theme="light"] .navbar { background: rgba(248,250,252,0.85); border-bottom: 1px solid var(--border); }
+.container { max-width: 900px; margin: 0 auto; padding: 0 24px; }
+.navbar-inner { display: flex; align-items: center; justify-content: space-between; }
+
+.logo { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--text); }
+.logo-icon { width: 36px; height: 36px; border-radius: 10px; background-image: url('logo.jpg'); background-size: cover; background-position: center; }
+.logo-text { font-weight: 700; font-size: 1.1rem; }
+.nav-links { display: flex; align-items: center; gap: 8px; }
+.nav-link { padding: 8px 16px; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; font-weight: 500; border-radius: 8px; transition: all 0.2s; }
+.nav-link:hover { color: var(--text); background: var(--card); }
+.nav-link.active { color: var(--accent-light); }
+.theme-toggle { padding: 8px 16px; background: none; border: 1px solid var(--border); color: var(--text-secondary); border-radius: 8px; cursor: pointer; font-size: 0.9rem; transition: all 0.2s; }
+.theme-toggle:hover { border-color: var(--accent); color: var(--text); }
+.nav-cta { padding: 10px 20px; background: var(--accent); color: white; text-decoration: none; font-size: 0.9rem; font-weight: 600; border-radius: 8px; transition: all 0.2s; }
+.nav-cta:hover { background: #6d28d9; }
+
+.page { padding: 120px 0 80px; }
+.page-header { margin-bottom: 48px; }
+.page-header h1 { font-size: 2.4rem; font-weight: 800; margin-bottom: 12px; background: linear-gradient(135deg, var(--text), var(--accent-light)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.page-header p { color: var(--text-secondary); font-size: 1.1rem; }
+
+.section { margin-bottom: 56px; }
+.section h2 { font-size: 1.4rem; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+.section h2 .tag { font-size: 0.75rem; padding: 4px 10px; background: rgba(124,58,237,0.15); color: var(--accent-light); border-radius: 20px; font-weight: 600; font-family: var(--mono); }
+.step-list { list-style: none; }
+.step-item { display: flex; gap: 16px; margin-bottom: 24px; }
+.step-num { width: 32px; height: 32px; background: var(--accent); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem; flex-shrink: 0; margin-top: 4px; }
+.step-content { flex: 1; }
+.step-content h3 { font-size: 1rem; font-weight: 600; margin-bottom: 8px; }
+.step-content p { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 10px; }
+
+.code-block { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px 20px; font-family: var(--mono); font-size: 0.85rem; overflow-x: auto; margin-top: 10px; }
+.code-block code { color: var(--green); }
+.code-block .comment { color: var(--text-muted); }
+.code-block .key { color: var(--cyan); }
+.code-block .value { color: var(--orange); }
+
+.requirements { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-top: 20px; }
+.req-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+.req-card h4 { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.05em; }
+.req-card p { font-weight: 600; font-size: 1rem; color: var(--text); }
+.req-card .version { color: var(--cyan); font-family: var(--mono); font-size: 0.85rem; margin-top: 4px; }
+
+.note { background: rgba(124,58,237,0.08); border: 1px solid rgba(124,58,237,0.25); border-radius: 10px; padding: 16px 20px; margin-top: 16px; font-size: 0.9rem; color: var(--text-secondary); }
+.note strong { color: var(--accent-light); }
+
+.success-box { background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.3); border-radius: 10px; padding: 16px 20px; margin-top: 20px; }
+.success-box p { color: var(--green); font-weight: 600; font-size: 0.95rem; }
+
+footer { text-align: center; padding: 48px 0; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 0.85rem; }
+footer a { color: var(--accent-light); text-decoration: none; }
+
+@media (max-width: 768px) {
+  .nav-links .nav-link:not(.nav-cta) { display: none; }
+  .page-header h1 { font-size: 1.8rem; }
+  .requirements { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="container">
+    <div class="navbar-inner">
+      <a href="index.html" class="logo">
+        <div class="logo-icon"></div>
+        <span class="logo-text">SoC Build</span>
+      </a>
+      <div class="nav-links">
+        <button id="themeToggle" class="theme-toggle" title="切换模式">🌙</button>
+        <a href="index.html" class="nav-link">首页</a>
+        <a href="tutorial.html" class="nav-link">教程</a>
+        <a href="install.html" class="nav-link active">下载安装</a>
+        <a href="tutorial.html" class="nav-cta">开始使用</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="page">
+  <div class="container">
+    <div class="page-header">
+      <h1>下载与安装</h1>
+      <p>通过 SkillHub 一键安装，或手动复制到本地，即刻开始使用 SoC Build。</p>
+    </div>
+
+    <!-- 方式一 -->
+    <div class="section">
+      <h2>方式一：SkillHub 安装 <span class="tag">推荐</span></h2>
+      <p style="color:var(--text-secondary); margin-bottom: 20px;">OpenClaw 用户可直接从 SkillHub 安装，一行命令搞定。</p>
+      <div class="step-list">
+        <div class="step-item">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <h3>确保 OpenClaw 已安装</h3>
+            <p>OpenClaw 是 SoC Build 的运行环境。访问 <a href="https://openclaw.ai" style="color:var(--accent-light)">openclaw.ai</a> 下载对应版本。</p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <h3>安装 SkillHub CLI</h3>
+            <p>在终端执行以下命令安装 CLI 工具：</p>
+            <div class="code-block"><code>npm install -g skillhub-cli</code></div>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <h3>安装 soc-build</h3>
+            <p>安装完成后，一条命令即可：</p>
+            <div class="code-block"><code>skillhub install soc-build</code></div>
+            <div class="success-box">
+              <p>✅ 安装成功！现在可以在 OpenClaw 中使用 SoC Build 了。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 方式二 -->
+    <div class="section">
+      <h2>方式二：手动安装</h2>
+      <p style="color:var(--text-secondary); margin-bottom: 20px;">不想用 SkillHub？也可以手动复制到本地目录。</p>
+      <div class="step-list">
+        <div class="step-item">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <h3>克隆仓库</h3>
+            <p>将 soc-build skill 仓库克隆到本地：</p>
+            <div class="code-block"><code>git clone https://github.com/your-repo/soc-build.git</code></div>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <h3>复制到 skills 目录</h3>
+            <p>将整个目录复制到 OpenClaw 的 skills 工作目录：</p>
+            <div class="code-block">
+              <code>cp</code> <span class="value">-r soc-build/</span>
+              <span class="comment">~/.openclaw/workspace/skills/</span>
+            </div>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <h3>验证安装</h3>
+            <p>重启 OpenClaw 后，在对话中发送：</p>
+            <div class="code-block"><code>帮我初始化一个 soc 项目</code></div>
+            <div class="note">
+              <strong>💡 如果提示找不到 skill，</strong>检查 ~/.openclaw/workspace/skills/ 目录下是否存在 soc-build/ 文件夹及其 SKILL.md 文件。
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 环境要求 -->
+    <div class="section">
+      <h2>环境要求</h2>
+      <div class="requirements">
+        <div class="req-card">
+          <h4>操作系统</h4>
+          <p>macOS / Linux / Windows (WSL)</p>
+        </div>
+        <div class="req-card">
+          <h4>Python</h4>
+          <p>Python 3.8+</p>
+          <div class="version">python3 --version</div>
+        </div>
+        <div class="req-card">
+          <h4>依赖包</h4>
+          <p>pandas, numpy</p>
+          <div class="version">pip3 install pandas numpy</div>
+        </div>
+        <div class="req-card">
+          <h4>OpenClaw</h4>
+          <p>v0.2.0+</p>
+          <div class="version">openclaw --version</div>
+        </div>
+      </div>
+      <div class="note" style="margin-top: 20px;">
+        <strong>📦 依赖安装：</strong>安装 skill 后，如遇脚本运行报错，请确保已安装 Python 依赖：
+        <div class="code-block" style="margin-top: 10px;"><code>pip3 install pandas numpy openpyxl</code></div>
+      </div>
+    </div>
+
+    <!-- 更新 -->
+    <div class="section">
+      <h2>更新与卸载</h2>
+      <div class="step-list">
+        <div class="step-item">
+          <div class="step-num">🔄</div>
+          <div class="step-content">
+            <h3>更新 skill</h3>
+            <p>通过 SkillHub 安装的用户，运行：</p>
+            <div class="code-block"><code>skillhub update soc-build</code></div>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">🗑</div>
+          <div class="step-content">
+            <h3>卸载</h3>
+            <p>删除 skills 目录下的 soc-build 文件夹即可：</p>
+            <div class="code-block">
+              <span class="comment"># SkillHub 用户</span><br>
+              <code>skillhub uninstall soc-build</code><br><br>
+              <span class="comment"># 手动安装用户</span><br>
+              <code>rm -rf</code> <span class="value">~/.openclaw/workspace/skills/soc-build</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <div class="container">
+    <p>SoC Build — OpenClaw Skill &nbsp;·&nbsp; <a href="https://openclaw.ai">openclaw.ai</a></p>
+  </div>
+</footer>
+
+<script>
+// Theme toggle
+(function() {
+  const html = document.documentElement;
+  const themeBtn = document.getElementById('themeToggle');
+  function getAutoTheme() {
+    const hour = new Date().getHours();
+    return hour >= 6 && hour < 18 ? 'light' : 'dark';
+  }
+  const saved = localStorage.getItem('theme');
+  const theme = saved || getAutoTheme();
+  html.setAttribute('data-theme', theme);
+  if (themeBtn) {
+    themeBtn.textContent = theme === 'dark' ? '🌙' : '☀️';
+    themeBtn.addEventListener('click', function() {
+      const current = html.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+      themeBtn.textContent = next === 'dark' ? '🌙' : '☀️';
+    });
+  }
+})();
+</script>
+
+</body>
+</html>
