@@ -698,6 +698,20 @@ footer a {
 }
 
 @media (max-width: 768px) {
+  .hamburger { display: block; }
+  .nav-links {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    right: 0;
+    background: var(--bg);
+    flex-direction: column;
+    padding: 20px;
+    border-bottom: 1px solid var(--border);
+    display: none;
+  }
+  .nav-links.active { display: flex; }
+  .nav-links a { width: 100%; text-align: center; padding: 12px; }
   .hero h1 { font-size: 2.2rem; }
   .features-grid { grid-template-columns: 1fr; }
   .stats { grid-template-columns: 1fr; }
@@ -758,7 +772,10 @@ footer a {
         <div class="logo-icon"></div>
         <span class="logo-text">SoC Build</span>
       </a>
-      <div class="nav-links">
+      <button class="hamburger" id="hamburger" onclick="document.getElementById('navLinks').classList.toggle('active')">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="nav-links" id="navLinks">
         <button id="themeToggle" class="theme-toggle" title="切换模式">🌙</button>
         <a href="index.html" class="nav-link active">首页</a>
         <a href="tutorial.html" class="nav-link">教程</a>
