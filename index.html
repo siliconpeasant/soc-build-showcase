@@ -322,9 +322,61 @@ body {
 
 /* HERO */
 .hero {
-  padding: 160px 0 120px;
-  text-align: center;
+  padding: 140px 0 80px;
   position: relative;
+}
+
+.hero .container {
+  text-align: center;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: rgba(124,58,237,0.15);
+  border: 1px solid rgba(124,58,237,0.3);
+  border-radius: 100px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent-light);
+  margin-bottom: 32px;
+}
+
+.hero h1 {
+  font-size: 4rem;
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+  margin-bottom: 24px;
+  background: linear-gradient(135deg, var(--text) 0%, var(--accent-light) 50%, var(--pink) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-subtitle {
+  font-size: 1.3rem;
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin: 0 auto 40px;
+  line-height: 1.7;
+}
+
+.hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.stats {
+  margin-top: 60px;
+  display: flex;
+  gap: 48px;
+  justify-content: center;
 }
 
 .hero::before {
@@ -617,7 +669,7 @@ footer a {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 12px;
+  gap: 20px;
   flex-wrap: wrap;
 }
 
@@ -652,6 +704,49 @@ footer a {
   .scenarios-list { grid-template-columns: 1fr; }
   .nav-links { display: none; }
 }
+
+/* QR CODE CTA */
+.qrcode-cta {
+  padding: 60px 0;
+  background: linear-gradient(135deg, rgba(124,58,237,0.08) 0%, rgba(236,72,153,0.05) 100%);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.qrcode-cta-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 48px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.qrcode-cta-card {
+  flex-shrink: 0;
+  background: var(--card);
+  border: 2px solid var(--accent);
+  border-radius: 20px;
+  padding: 28px;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(124,58,237,0.2);
+}
+
+.qrcode-cta-card img {
+  width: 160px;
+  height: 160px;
+  border-radius: 12px;
+  display: block;
+  margin: 0 auto 12px;
+}
+
+.qrcode-cta-card-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-top: 12px;
+}
+
 </style>
 </head>
 <body>
@@ -674,37 +769,37 @@ footer a {
 </nav>
 
 <section class="hero">
-  <div class="container">
-    <div class="hero-badge">
-      <span class="hero-badge-dot"></span>
-      OpenClaw Skill
-    </div>
-    <h1>SoC Build</h1>
-    <p class="hero-subtitle">
-      RTL 自动化构建工具集。通过自然语言交互，完成 SoC 项目初始化、模块集成、CRG 生成等综合工作。
-    </p>
-    <div class="hero-actions">
-      <a href="tutorial.html" class="btn btn-primary">
-        📖 查看教程
-      </a>
-    </div>
-    
-    <div class="stats">
-      <div class="stat">
-        <div class="stat-value">14</div>
-        <div class="stat-label">自动化场景</div>
+  <div class="container"><div class="hero-badge">
+        <span class="hero-badge-dot"></span>
+        OpenClaw Skill
       </div>
-      <div class="stat">
-        <div class="stat-value">100%</div>
-        <div class="stat-label">自然语言驱动</div>
+      <h1>SoC Build</h1>
+      <p class="hero-subtitle">
+        RTL 自动化构建工具集。通过自然语言交互，完成 SoC 项目初始化、模块集成、CRG 生成等综合工作。
+      </p>
+      <div class="hero-actions">
+        <a href="tutorial.html" class="btn btn-primary">
+          📖 查看教程
+        </a>
       </div>
-      <div class="stat">
-        <div class="stat-value">0</div>
-        <div class="stat-label">手动编码</div>
-      </div>
-    </div>
-  </div>
+      
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-value">14</div>
+          <div class="stat-label">自动化场景</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">100%</div>
+          <div class="stat-label">自然语言驱动</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">0</div>
+          <div class="stat-label">手动编码</div>
+        </div>
+      </div></div>
 </section>
+
+
 
 <section class="features">
   <div class="container">
@@ -872,6 +967,18 @@ footer a {
   </div>
 </section>
 
+<!-- 公众号二维码 -->
+<section class="qrcode-cta">
+  <div class="container">
+    <div class="qrcode-cta-content">
+      <div class="qrcode-cta-card">
+        <img src="qrcode.jpg" alt="硅农公众号二维码">
+        <div class="qrcode-cta-card-title">📱 扫码关注「硅农」公众号</div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <footer>
   <div class="container">
     <div class="footer-content">
@@ -882,10 +989,6 @@ footer a {
           <span>ninghechuan@foxmail.com</span>
         </a>
         <span class="contact-divider">|</span>
-        <span class="contact-item">
-          <span>📱</span>
-          <span>公众号：硅农</span>
-        </span>
       </div>
     </div>
   </div>

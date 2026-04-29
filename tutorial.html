@@ -291,8 +291,26 @@ footer a { color: var(--accent-light); text-decoration: none; }
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 12px;
+  gap: 20px;
   flex-wrap: wrap;
+}
+
+.footer-qrcode {
+  text-align: center;
+}
+
+.footer-qrcode img {
+  width: 100px;
+  height: 100px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+
+.footer-qrcode span {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 6px;
 }
 
 .contact-item {
@@ -721,10 +739,10 @@ footer a { color: var(--accent-light); text-decoration: none; }
               <span>ninghechuan@foxmail.com</span>
             </a>
             <span class="contact-divider">|</span>
-            <span class="contact-item">
-              <span class="contact-icon">📱</span>
-              <span>公众号：硅农</span>
-            </span>
+            <div class="footer-qrcode">
+              <img src="qrcode.jpg" alt="硅农公众号二维码">
+              <span>扫码关注「硅农」</span>
+            </div>
           </div>
         </div>
       </div>
