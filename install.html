@@ -68,6 +68,24 @@ body {
 .nav-cta { padding: 10px 20px; background: var(--accent); color: white; text-decoration: none; font-size: 0.9rem; font-weight: 600; border-radius: 8px; transition: all 0.2s; }
 .nav-cta:hover { background: #6d28d9; }
 
+.hamburger {
+  display: none;
+  background: var(--card);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  padding: 8px;
+  margin-left: 8px;
+  border-radius: 6px;
+}
+.hamburger span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--text);
+  margin: 5px 0;
+  transition: all 0.3s;
+}
+
 .page { padding: 120px 0 80px; }
 .page-header { margin-bottom: 48px; }
 .page-header h1 { font-size: 2.4rem; font-weight: 800; margin-bottom: 12px; background: linear-gradient(135deg, var(--text), var(--accent-light)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
@@ -105,7 +123,23 @@ footer { text-align: center; padding: 48px 0; border-top: 1px solid var(--border
 footer a { color: var(--accent-light); text-decoration: none; }
 
 @media (max-width: 768px) {
-  .nav-links .nav-link:not(.nav-cta) { display: none; }
+  .hamburger { display: block; }
+  .nav-links {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    right: 0;
+    background: var(--card);
+    flex-direction: column;
+    padding: 20px;
+    border-bottom: 1px solid var(--border);
+    display: none;
+    z-index: 999;
+    align-items: center;
+  }
+  .nav-links.active { display: flex; }
+  .nav-links a, .nav-links button { display: block; width: 100%; text-align: center; padding: 12px; color: var(--text); font-size: 1rem; font-weight: 500; }
+  .theme-toggle { border: none; background: transparent; justify-content: center; }
   .page-header h1 { font-size: 1.8rem; }
   .requirements { grid-template-columns: 1fr; }
 }
@@ -120,7 +154,10 @@ footer a { color: var(--accent-light); text-decoration: none; }
         <div class="logo-icon"></div>
         <span class="logo-text">SoC Build</span>
       </a>
-      <div class="nav-links">
+      <button class="hamburger" id="hamburger" onclick="document.getElementById('navLinks').classList.toggle('active')">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="nav-links" id="navLinks">
         <button id="themeToggle" class="theme-toggle" title="切换模式">🌙</button>
         <a href="index.html" class="nav-link">首页</a>
         <a href="tutorial.html" class="nav-link">教程</a>

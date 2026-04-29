@@ -717,8 +717,8 @@ footer a {
 @media (max-width: 768px) {
   .hamburger {
     display: block;
-    background: #1f2937;
-    border: none;
+    background: var(--card);
+    border: 1px solid var(--border);
     cursor: pointer;
     padding: 8px;
     margin-left: 8px;
@@ -728,7 +728,7 @@ footer a {
     display: block;
     width: 24px;
     height: 2px;
-    background: #f9fafb;
+    background: var(--text);
     margin: 5px 0;
     transition: all 0.3s;
   }
@@ -737,15 +737,15 @@ footer a {
     top: 60px;
     left: 0;
     right: 0;
-    background: #111827;
+    background: var(--card);
     flex-direction: column;
     padding: 20px;
-    border-bottom: 1px solid #1f2937;
+    border-bottom: 1px solid var(--border);
     display: none;
     z-index: 999;
   }
   .nav-links.active { display: flex; }
-  .nav-links a { display: block; width: 100%; text-align: center; padding: 12px; color: #f9fafb; font-size: 1rem; font-weight: 500; }
+  .nav-links a { display: block; width: 100%; text-align: center; padding: 12px; color: var(--text); font-size: 1rem; font-weight: 500; }
   .hero h1 { font-size: 2.2rem; }
   .features-grid { grid-template-columns: 1fr; }
   .stats { grid-template-columns: 1fr; }
