@@ -835,7 +835,7 @@ footer a {
       
       <div class="stats">
         <div class="stat">
-          <div class="stat-value">14</div>
+          <div class="stat-value">15</div>
           <div class="stat-label">自动化场景</div>
         </div>
         <div class="stat">
@@ -878,15 +878,15 @@ footer a {
       </div>
       
       <div class="feature-card">
-        <div class="feature-icon">🔄</div>
-        <h3 class="feature-title">增量更新</h3>
-        <p class="feature-desc">子模块端口变更后一键刷新顶层，自动标记新增/修改/删除端口，保留手动连线。</p>
+        <div class="feature-icon">🔧</div>
+        <h3 class="feature-title">模块仿真</h3>
+        <p class="feature-desc">支持 VCS、Verilator、Iverilog、Xcelium，一键编译、运行仿真和 lint 检查。</p>
       </div>
       
       <div class="feature-card">
-        <div class="feature-icon">📝</div>
-        <h3 class="feature-title">端口追踪</h3>
-        <p class="feature-desc">保存端口快照，对比检测变更，生成变更报告，确保接口一致性。</p>
+        <div class="feature-icon">📋</div>
+        <h3 class="feature-title">依赖管理</h3>
+        <p class="feature-desc">通过 filelist.mk 自动管理模块依赖，编译时按依赖顺序展开 RTL。</p>
       </div>
       
       <div class="feature-card">
@@ -912,54 +912,58 @@ footer a {
       </div>
       <div class="scenario-item">
         <span class="scenario-num">02</span>
-        <span class="scenario-text">生成 Filelist</span>
+        <span class="scenario-text">模块仿真（编译/lint/仿真）</span>
       </div>
       <div class="scenario-item">
         <span class="scenario-num">03</span>
-        <span class="scenario-text">提取模块端口</span>
+        <span class="scenario-text">filelist.mk 依赖管理</span>
       </div>
       <div class="scenario-item">
         <span class="scenario-num">04</span>
-        <span class="scenario-text">生成实例化代码</span>
+        <span class="scenario-text">提取模块端口</span>
       </div>
       <div class="scenario-item">
         <span class="scenario-num">05</span>
-        <span class="scenario-text">集成模块到顶层</span>
+        <span class="scenario-text">生成实例化代码</span>
       </div>
       <div class="scenario-item">
         <span class="scenario-num">06</span>
-        <span class="scenario-text">刷新顶层（子模块更新后）</span>
+        <span class="scenario-text">集成模块到顶层</span>
       </div>
       <div class="scenario-item">
         <span class="scenario-num">07</span>
-        <span class="scenario-text">保留手动修改的连线</span>
+        <span class="scenario-text">刷新顶层（子模块更新后）</span>
       </div>
       <div class="scenario-item">
         <span class="scenario-num">08</span>
-        <span class="scenario-text">生成 CRG</span>
+        <span class="scenario-text">保留手动修改的连线</span>
       </div>
       <div class="scenario-item">
         <span class="scenario-num">09</span>
-        <span class="scenario-text">生成 IO/Pad</span>
+        <span class="scenario-text">生成 CRG</span>
       </div>
       <div class="scenario-item">
         <span class="scenario-num">10</span>
-        <span class="scenario-text">生成寄存器 RTL（YML）</span>
+        <span class="scenario-text">生成 IO/Pad</span>
       </div>
       <div class="scenario-item">
         <span class="scenario-num">11</span>
-        <span class="scenario-text">生成寄存器 RTL（Excel）</span>
+        <span class="scenario-text">生成寄存器 RTL（YML）</span>
       </div>
       <div class="scenario-item">
         <span class="scenario-num">12</span>
-        <span class="scenario-text">生成 Memory Map</span>
+        <span class="scenario-text">从 Excel 生成寄存器 RTL</span>
       </div>
       <div class="scenario-item">
         <span class="scenario-num">13</span>
-        <span class="scenario-text">生成 Memory Wrapper</span>
+        <span class="scenario-text">生成 Memory Map</span>
       </div>
       <div class="scenario-item">
         <span class="scenario-num">14</span>
+        <span class="scenario-text">生成 Memory Wrapper</span>
+      </div>
+      <div class="scenario-item">
+        <span class="scenario-num">15</span>
         <span class="scenario-text">端口变更追踪</span>
       </div>
     </div>
