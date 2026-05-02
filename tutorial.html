@@ -386,17 +386,16 @@ footer a { color: var(--accent-light); text-decoration: none; }
       <a href="#s4" class="nav-link"><span class="nav-link-num">04</span>提取端口</a>
       <a href="#s5" class="nav-link"><span class="nav-link-num">05</span>生成实例化</a>
       <a href="#s6" class="nav-link"><span class="nav-link-num">06</span>集成模块</a>
-      <a href="#s7" class="nav-link"><span class="nav-link-num">07</span>刷新顶层</a>
-      <a href="#s8" class="nav-link"><span class="nav-link-num">08</span>保留连线</a>
+      <a href="#s7" class="nav-link"><span class="nav-link-num">07</span>端口追踪</a>
+      <a href="#s8" class="nav-link"><span class="nav-link-num">08</span>刷新顶层</a>
+      <a href="#s9" class="nav-link"><span class="nav-link-num">09</span>保留连线</a>
       <div class="nav-section-title" style="margin-top: 12px; font-size: 0.6rem; opacity: 0.7;">四、RTL 自动生成</div>
-      <a href="#s9" class="nav-link"><span class="nav-link-num">09</span>生成 CRG</a>
-      <a href="#s10" class="nav-link"><span class="nav-link-num">10</span>生成 IO/PINMUX</a>
-      <a href="#s11" class="nav-link"><span class="nav-link-num">11</span>寄存器 RTL (YML)</a>
-      <a href="#s12" class="nav-link"><span class="nav-link-num">12</span>寄存器 RTL (Excel)</a>
-      <a href="#s13" class="nav-link"><span class="nav-link-num">13</span>生成 MemMap</a>
-      <a href="#s14" class="nav-link"><span class="nav-link-num">14</span>Memory Wrapper</a>
-      <div class="nav-section-title" style="margin-top: 12px; font-size: 0.6rem; opacity: 0.7;">五、端口追踪</div>
-      <a href="#s15" class="nav-link"><span class="nav-link-num">15</span>端口追踪</a>
+      <a href="#s10" class="nav-link"><span class="nav-link-num">10</span>生成 CRG</a>
+      <a href="#s11" class="nav-link"><span class="nav-link-num">11</span>生成 IO/PINMUX</a>
+      <a href="#s12" class="nav-link"><span class="nav-link-num">12</span>生成寄存器 RTL</a>
+      <a href="#s13" class="nav-link"><span class="nav-link-num">13</span>从 Excel 生成寄存器 RTL</a>
+      <a href="#s14" class="nav-link"><span class="nav-link-num">14</span>生成 MemMap</a>
+      <a href="#s15" class="nav-link"><span class="nav-link-num">15</span>Memory Wrapper</a>
       <a href="#mcp" class="nav-link"><span class="nav-link-num">🔌</span>MCP Server</a>
       <div class="nav-section-title" style="margin-top: 20px;">设置</div>
       <!-- <a href="install.html" class="nav-link" style="color:var(--green);font-weight:600;"><span class="nav-link-num">⬇</span>下载安装</a> -->
@@ -602,6 +601,26 @@ include $(RTL_PATH)/filelist.mk
           <div class="scenario-header">
             <div class="scenario-num">07</div>
             <div class="scenario-title-wrap">
+              <h3 class="scenario-title">端口变更追踪</h3>
+              <div class="scenario-tag">PORT TRACKING</div>
+            </div>
+          </div>
+          <div class="chat-section">
+            <div class="chat-label">💬 对话示例</div>
+            <div class="chat-block">
+              <div class="chat-content">
+                <div class="chat-prompt">"对比下这个模块端口有没有变"<br>"检查端口是否符合规范"</div>
+                <div class="chat-action">保存端口快照 → 对比检测变更 → 生成报告</div>
+                <div class="chat-output">发现 3 个新增端口，1 个删除</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="scenario" id="s8">
+          <div class="scenario-header">
+            <div class="scenario-num">08</div>
+            <div class="scenario-title-wrap">
               <h3 class="scenario-title">刷新顶层（子模块更新后）</h3>
               <div class="scenario-tag">TOP REFRESH</div>
             </div>
@@ -626,9 +645,9 @@ include $(RTL_PATH)/filelist.mk
           </div>
         </div>
 
-        <div class="scenario" id="s8">
+        <div class="scenario" id="s9">
           <div class="scenario-header">
-            <div class="scenario-num">08</div>
+            <div class="scenario-num">09</div>
             <div class="scenario-title-wrap">
               <h3 class="scenario-title">保留手动修改的连线</h3>
               <div class="scenario-tag">MANUAL SYNC</div>
@@ -647,9 +666,11 @@ include $(RTL_PATH)/filelist.mk
         </div>
 
         <div style="margin: 48px 0 8px; font-size: 0.75rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em;">四、RTL 自动生成</div>
-        <div class="scenario" id="s9">
+        <div style="margin: 48px 0 8px; font-size: 0.75rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em;">四、RTL 自动生成</div>
+
+        <div class="scenario" id="s10">
           <div class="scenario-header">
-            <div class="scenario-num">09</div>
+            <div class="scenario-num">10</div>
             <div class="scenario-title-wrap">
               <h3 class="scenario-title">生成 CRG</h3>
               <div class="scenario-tag">CRG GENERATION</div>
@@ -667,9 +688,9 @@ include $(RTL_PATH)/filelist.mk
           </div>
         </div>
 
-        <div class="scenario" id="s10">
+        <div class="scenario" id="s11">
           <div class="scenario-header">
-            <div class="scenario-num">10</div>
+            <div class="scenario-num">11</div>
             <div class="scenario-title-wrap">
               <h3 class="scenario-title">生成 IO/PINMUX</h3>
               <div class="scenario-tag">IO GENERATION</div>
@@ -687,12 +708,12 @@ include $(RTL_PATH)/filelist.mk
           </div>
         </div>
 
-        <div class="scenario" id="s11">
+        <div class="scenario" id="s12">
           <div class="scenario-header">
-            <div class="scenario-num">11</div>
+            <div class="scenario-num">12</div>
             <div class="scenario-title-wrap">
-              <h3 class="scenario-title">生成寄存器 RTL（YML）</h3>
-              <div class="scenario-tag">REGFILE YML</div>
+              <h3 class="scenario-title">生成寄存器 RTL</h3>
+              <div class="scenario-tag">REGFILE RTL</div>
             </div>
           </div>
           <div class="chat-section">
@@ -700,18 +721,18 @@ include $(RTL_PATH)/filelist.mk
             <div class="chat-block">
               <div class="chat-content">
                 <div class="chat-prompt">"从 YML 生成寄存器文件"<br>"帮我生成 apb regfile"</div>
-                <div class="chat-action">解析 YAML 寄存器描述 → 生成 APB/AHB/DAB 接口 regfile</div>
+                <div class="chat-action">解析 YAML 寄存器描述 → 生成 APB/AHB 接口 regfile</div>
                 <div class="chat-output">已生成 demo_apb_regfile.v</div>
               </div>
             </div>
           </div>
         </div>
 
-        <div class="scenario" id="s12">
+        <div class="scenario" id="s13">
           <div class="scenario-header">
-            <div class="scenario-num">12</div>
+            <div class="scenario-num">13</div>
             <div class="scenario-title-wrap">
-              <h3 class="scenario-title">生成寄存器 RTL（Excel）</h3>
+              <h3 class="scenario-title">从 Excel 生成寄存器 RTL</h3>
               <div class="scenario-tag">REGFILE EXCEL</div>
             </div>
           </div>
@@ -727,9 +748,9 @@ include $(RTL_PATH)/filelist.mk
           </div>
         </div>
 
-        <div class="scenario" id="s13">
+        <div class="scenario" id="s14">
           <div class="scenario-header">
-            <div class="scenario-num">13</div>
+            <div class="scenario-num">14</div>
             <div class="scenario-title-wrap">
               <h3 class="scenario-title">生成 Memory Map</h3>
               <div class="scenario-tag">MEMORY MAP</div>
@@ -747,9 +768,9 @@ include $(RTL_PATH)/filelist.mk
           </div>
         </div>
 
-        <div class="scenario" id="s14">
+        <div class="scenario" id="s15">
           <div class="scenario-header">
-            <div class="scenario-num">14</div>
+            <div class="scenario-num">15</div>
             <div class="scenario-title-wrap">
               <h3 class="scenario-title">生成 Memory Wrapper</h3>
               <div class="scenario-tag">MEMORY WRAPPER</div>
@@ -768,26 +789,6 @@ include $(RTL_PATH)/filelist.mk
         </div>
 
         <div style="margin: 48px 0 8px; font-size: 0.75rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em;">五、端口变更追踪</div>
-        <div class="scenario" id="s15">
-          <div class="scenario-header">
-            <div class="scenario-num">15</div>
-            <div class="scenario-title-wrap">
-              <h3 class="scenario-title">端口变更追踪</h3>
-              <div class="scenario-tag">PORT TRACKING</div>
-            </div>
-          </div>
-          <div class="chat-section">
-            <div class="chat-label">💬 对话示例</div>
-            <div class="chat-block">
-              <div class="chat-content">
-                <div class="chat-prompt">"对比下这个模块端口有没有变"<br>"检查端口是否符合规范"</div>
-                <div class="chat-action">保存端口快照 → 对比检测变更 → 生成报告</div>
-                <div class="chat-output">发现 3 个新增端口，1 个删除</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
         <div style="margin: 48px 0 8px; font-size: 0.75rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em;">MCP Server</div>
         <div class="scenario" id="mcp">
           <div class="scenario-header">
